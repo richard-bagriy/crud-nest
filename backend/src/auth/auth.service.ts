@@ -9,8 +9,8 @@ export class AuthService {
 
     async register(userDto: UserCreateDto): Promise<RegistrationStatus> {
         try {
-            await this.usersService.create(userDto);
-            return { success: true, message: "User registrated" };
+            const user = await this.usersService.create(userDto);
+            return { success: true, message: "User registrated", user };
         } catch (error) {
             return { success: false, message: error }
         }
