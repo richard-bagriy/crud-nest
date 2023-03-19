@@ -32,11 +32,11 @@ export class AuthController {
     @UseGuards(AuthGuard("jwt"))
     @Post('logout')
     public async logout(@GetCurrentUserIdDecorator() id: string): Promise<boolean> {
-        console.log(id);
+        this.authService.logout(id);
         return true;
     }
 
-    @UseGuards(AuthGuard('jwt-refresh'))
+    @UseGuards(AuthGuard("jwt-refresh"))
     @Post('refresh')
     public async refresh(
         @GetCurrentUserIdDecorator() id: string,

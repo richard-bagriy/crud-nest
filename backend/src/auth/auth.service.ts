@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
@@ -34,8 +34,13 @@ export class AuthService {
         return tokens;
     }
 
-    async refreshTokens(id: string, email: string): Promise<Tokens> {
+    async refreshTokens(id: string, refreshToken: string): Promise<Tokens> {
         const user = await this.usersService.findById(id);
+
+        if ((user.refreshToken !== refreshToken) || !user.refreshToken) {
+            throw new ForbiddenException('Access Denied');
+        }
+
         const tokens = await this._createTokens(user.id, user.email);
         this.usersService.updateRefreshToken(user.id, tokens.refresh_token);
 
@@ -68,7 +73,6 @@ export class AuthService {
     public async logout(id: string): Promise<boolean> {
         const user = await this.usersService.findById(id);
         this.usersService.updateRefreshToken(user.id, "");
-
         return true;
     }
 }

@@ -41,8 +41,8 @@ export class UsersService {
 
 
     private _sanitizeUser(user: UserDocument): UserDetails {
-        const { email, username, id, createdAt, updatedAt } = user;
-        return { email, username, id, createdAt, updatedAt };
+        const { email, username, id, createdAt, updatedAt, refreshToken } = user;
+        return { email, username, id, createdAt, updatedAt, refreshToken };
     }
 
     public async findById(id: string): Promise<UserDetails> {
@@ -54,11 +54,14 @@ export class UsersService {
         return this._sanitizeUser(user);
     }
 
-    public async updateRefreshToken(id: string, token: string): Promise<void> {
-        // TODO: make some check
-        this.userModel.findByIdAndUpdate(id, { $set: {
-            refreshToken: token
-        }});
-        
+    public async updateRefreshToken(id: string, token: string): Promise<boolean> {
+        try {
+            await this.userModel.findByIdAndUpdate(id, { $set: {
+                refreshToken: token
+            }});
+            return true;
+        } catch (error) {
+            throw new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST, { cause: new Error(error?.message || error) });
+        }
     }
 }

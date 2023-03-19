@@ -4,4 +4,5 @@ export interface UserDetails {
     username: string;
     createdAt?: Date;
     updatedAt?: Date;
+    refreshToken?: string;
 }
