@@ -15,7 +15,7 @@ export class UsersService {
 
         const userExists = await this.userModel.findOne({ email });
         if (userExists) {
-            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+            throw new HttpException('User already exists', HttpStatus.BAD_REQUEST, { cause: new Error() });
         }
 
         const hashedPassword = await this.hashService.hashPassword(password);

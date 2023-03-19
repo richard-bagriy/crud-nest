@@ -12,7 +12,7 @@ export class AuthController {
         const result: RegistrationStatus = await this.authService.register(userCreateDto);
 
         if (!result.success) {
-            throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
+            throw new HttpException(result.message, HttpStatus.BAD_REQUEST, { cause: new Error() });
         }
 
         return result;

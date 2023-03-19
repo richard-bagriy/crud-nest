@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { UserCreateDto } from "../users/dto/user.create.dto";
 import { RegistrationStatus } from './interfaces/registration-status.interface';
