@@ -19,6 +19,9 @@ export class User {
 
     @Prop()
     updatedAt?: Date;
+
+    @Prop()
+    refreshToken?: string;
 }
 
 

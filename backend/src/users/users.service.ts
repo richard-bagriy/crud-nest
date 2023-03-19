@@ -44,4 +44,21 @@ export class UsersService {
         const { email, username, id, createdAt, updatedAt } = user;
         return { email, username, id, createdAt, updatedAt };
     }
+
+    public async findById(id: string): Promise<UserDetails> {
+        const user = await this.userModel.findById(id);
+        if (!user) {
+            throw new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST, { cause: new Error() });
+        }
+
+        return this._sanitizeUser(user);
+    }
+
+    public async updateRefreshToken(id: string, token: string): Promise<void> {
+        // TODO: make some check
+        this.userModel.findByIdAndUpdate(id, { $set: {
+            refreshToken: token
+        }});
+        
+    }
 }
