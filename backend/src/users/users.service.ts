@@ -20,7 +20,12 @@ export class UsersService {
         }
 
         const hashedPassword = await this.hashService.hashPassword(password);
-        const newUser = new this.userModel({...userCreateDto, password: hashedPassword, createdAt: new Date()});
+        const newUser = new this.userModel({
+            ...userCreateDto, 
+            password: hashedPassword, 
+            createdAt: new Date(),
+            role: "user"
+        });
         await newUser.save();
         return this._sanitizeUser(newUser);
     }
@@ -41,8 +46,8 @@ export class UsersService {
 
 
     private _sanitizeUser(user: UserDocument): UserDetails {
-        const { email, username, id, createdAt, updatedAt, refreshToken } = user;
-        return { email, username, id, createdAt, updatedAt, refreshToken };
+        const { email, username, id, createdAt, updatedAt, refreshToken, role } = user;
+        return { email, username, id, createdAt, updatedAt, refreshToken, role };
     }
 
     public async findById(id: string): Promise<UserDetails> {
