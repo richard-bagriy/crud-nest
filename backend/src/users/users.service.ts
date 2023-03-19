@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserCreateDto } from './dto/user.create.dto';
+import { UserLoginDto } from './dto/user.login.dto';
 import { HashService } from './hash.service';
 import { UserDetails } from './interfaces/user-details.interface';
 import { UserDocument, User } from "./schemas/user.schema";
@@ -10,8 +11,8 @@ import { UserDocument, User } from "./schemas/user.schema";
 export class UsersService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>, private hashService: HashService) {}
 
-    async create(userDto: UserCreateDto): Promise<UserDetails> {
-        const { email, password } = userDto;
+    public async create(userCreateDto: UserCreateDto): Promise<UserDetails> {
+        const { email, password } = userCreateDto;
 
         const userExists = await this.userModel.findOne({ email });
         if (userExists) {
@@ -19,12 +20,27 @@ export class UsersService {
         }
 
         const hashedPassword = await this.hashService.hashPassword(password);
-        const newUser = new this.userModel({...userDto, password: hashedPassword, createdAt: new Date()});
+        const newUser = new this.userModel({...userCreateDto, password: hashedPassword, createdAt: new Date()});
         await newUser.save();
         return this._sanitizeUser(newUser);
     }
 
-    public _sanitizeUser(user: UserDocument): UserDetails {
+    public async findByLogin({ email, password }: UserLoginDto): Promise<UserDetails> {
+        const user = await this.userModel.findOne({ email });
+        if (!user) {
+            throw new HttpException("Wrong email or password", HttpStatus.BAD_REQUEST, { cause: new Error() });
+        }
+
+        const equalPassword = await this.hashService.comparePassword(password, user.password);
+        if (!equalPassword) {
+            throw new HttpException("Wrong email or password", HttpStatus.BAD_REQUEST, { cause: new Error() });
+        }
+
+        return this._sanitizeUser(user);
+    }
+
+
+    private _sanitizeUser(user: UserDocument): UserDetails {
         const { email, username, id, createdAt, updatedAt } = user;
         return { email, username, id, createdAt, updatedAt };
     }
