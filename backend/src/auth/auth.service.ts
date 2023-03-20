@@ -7,6 +7,7 @@ import { RegistrationStatus } from './interfaces/registration-status.interface';
 import { UserLoginDto } from "../users/dto/user.login.dto";
 import { Tokens } from "./interfaces/tokens.interface";
 import { JwtPayload } from './interfaces/jwt.payload.interface';
+import { UserDocument } from '../users/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -74,5 +75,9 @@ export class AuthService {
         const user = await this.usersService.findById(id);
         this.usersService.updateRefreshToken(user.id, "");
         return true;
+    }
+
+    public async validateUser(email: string): Promise<UserDocument> {
+        return await this.usersService.findByEmail(email);
     }
 }

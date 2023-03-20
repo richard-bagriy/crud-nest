@@ -69,4 +69,14 @@ export class UsersService {
             throw new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST, { cause: new Error(error?.message || error) });
         }
     }
+
+    public async findByEmail(email: string): Promise<UserDocument> {
+        const user = await this.userModel.findOne({ email });
+
+        if (!user) {
+            throw new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST, { cause: new Error() });
+        }
+
+        return user;
+    }
 }
