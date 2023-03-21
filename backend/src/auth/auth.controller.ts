@@ -25,13 +25,11 @@ export class AuthController {
     }
 
     @Post('login')
-    public async login(@Body() userLoginDto: UserLoginDto): Promise<""> {
-        console.log(userLoginDto, "WHATTT");
-        return "";
-        // return await this.authService.login(userLoginDto);
+    public async login(@Body() userLoginDto: UserLoginDto): Promise<Tokens> {
+        return await this.authService.login(userLoginDto);
     }
 
-    // @UseGuards(AuthGuard("jwt"))
+    @UseGuards(AuthGuard("jwt"))
     @Post('logout')
     public async logout(@GetCurrentUserIdDecorator() id: string): Promise<boolean> {
         this.authService.logout(id);
