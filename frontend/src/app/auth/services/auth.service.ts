@@ -28,8 +28,8 @@ export class AuthService {
 		return this.currentUserSubject.value;
 	}
 
-	login(username: string, password: string) {
-		return this.http.post<any>('/auth/login', { username, password }).pipe(
+	login(email: string, password: string) {
+		return this.http.post<any>('/api/auth/login', { email, password }).pipe(
 			map(user => {
 				if (user && user.accessToken) {
 					localStorage.setItem('user', JSON.stringify(user));
@@ -39,6 +39,10 @@ export class AuthService {
 				return user;
 			})
 		);
+	}
+
+	registration(email: string, username: string, password: string) {
+		return this.http.post('/api/auth/register', { email, username, password }).pipe()
 	}
 
 	logout() {

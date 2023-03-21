@@ -9,19 +9,19 @@
       <div class="col-md-6 offset-md-3">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
           <div class="form-group">
-            <label for="usernam">Username</label>
+            <label for="email">Email:</label>
             <input
               type="text"
               class="form-control"
-              id="username"
-              formControlName="username"
-              placeholder="Username"
+              id="email"
+              formControlName="email"
+              placeholder="Email"
             />
-            <div *ngIf="submitted && f.username.errors">
+            <div *ngIf="submitted && f.email.errors">
               <small
-                *ngIf="f.username.errors.required"
+                *ngIf="f.email.errors.required"
                 class="form-text text-muted"
-                >Username is required</small
+                >Email is required</small
               >
             </div>
           </div>
@@ -47,6 +47,9 @@
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+        <div class="mr-top-3">
+          <button type="button" routerLink="/registration">registration</button>
+        </div>
       </div>
     </div>
   </div>
