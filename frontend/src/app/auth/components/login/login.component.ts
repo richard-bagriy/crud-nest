@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
 	loginForm: FormGroup;
 	returnUrl: string;
 	error: string;
-	hide: boolean = false;
+	hide: boolean = true;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
 
 	onSubmit() {
 		if (this.loginForm.invalid) {
-			alert("what?");
 			return;
 		}
 

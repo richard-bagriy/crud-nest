@@ -40,7 +40,7 @@ export class AuthService {
 		);
 	}
 
-	registration(email: string, username: string, password: string) {
+	public registration(email: string, username: string, password: string) {
 		return this.http.post('/api/auth/register', { email, username, password }).pipe()
 	}
 

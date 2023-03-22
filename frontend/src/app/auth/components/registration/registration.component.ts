@@ -10,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegistrationComponent implements OnInit {
   registrationForm: FormGroup;
-  submitted: boolean = false;
+  hide: boolean = true;
   error: string = "";
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder) {}
@@ -28,16 +28,14 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    this.submitted = true;
-
     if (this.registrationForm.invalid) {
       return;
     }
 
     const { email, username, password } = this.registrationForm.value;
     this.authService.registration(email, username, password).pipe(first()).subscribe(
-      () => {
-        this.error = ""
+      (message: any) => {
+        this.error = message.message
       },
       error => {
         this.error = error;
