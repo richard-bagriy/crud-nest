@@ -5,9 +5,8 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 export interface ApplicationUser {
-	accessToken: string;
-	expiresIn: Date;
-	username: string;
+	access_token: string;
+	refresh_token: string;
 }
 
 @Injectable({
@@ -19,7 +18,7 @@ export class AuthService {
 
 	constructor(private readonly http: HttpClient) {
 		this.currentUserSubject = new BehaviorSubject<ApplicationUser>(
-			JSON.parse(localStorage.getItem('currentUser') as string)
+			JSON.parse(localStorage.getItem('user') as string)
 		);
 		this.currentUser = this.currentUserSubject.asObservable();
 	}
@@ -30,13 +29,13 @@ export class AuthService {
 
 	login(email: string, password: string) {
 		return this.http.post<any>('/api/auth/login', { email, password }).pipe(
-			map(user => {
-				if (user && user.accessToken) {
-					localStorage.setItem('user', JSON.stringify(user));
-					this.currentUserSubject.next(user);
+			map(tokens => {
+				if (tokens && tokens.access_token) {
+					localStorage.setItem('user', JSON.stringify(tokens));
+					this.currentUserSubject.next(tokens);
 				}
 
-				return user;
+				return tokens;
 			})
 		);
 	}

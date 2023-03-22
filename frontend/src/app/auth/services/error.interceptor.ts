@@ -16,12 +16,10 @@ export class ErrorInterceptor implements HttpInterceptor {
 			catchError((err: HttpErrorResponse) => {
 				if (err.status === 401 && !window.location.href.includes('/login')) {
 					this.authService.logout();
-					location.reload();
 				}
 
 				const error = err.error.error || err.error.message || err.statusText;
 				console.error(error);
-
 				return throwError(error);
 			})
 		);

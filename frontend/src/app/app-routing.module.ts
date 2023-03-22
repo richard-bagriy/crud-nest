@@ -5,16 +5,23 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from "./auth/components/login/login.component"
 import { AuthGuard } from './auth/auth.guard';
 import { RegistrationComponent } from './auth/components/registration/registration.component';
+import { TodoComponent } from './todo/todo.component';
 
 const routes: Routes = [
   {
     path: "",
     component: MainComponent,
     canActivate: [AuthGuard],
-    children: [{
-      path: "",
-      component: HomeComponent
-    }]
+    children: [
+      {
+        path: "",
+        component: HomeComponent
+      },
+      {
+        path: "todo",
+        component: TodoComponent
+      }
+    ]
   },
   {
     path: "",

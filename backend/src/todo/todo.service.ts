@@ -52,8 +52,8 @@ export class TodoService {
 
     public async updateTodo({ done, title }: UpdateTodoDto, id: string): Promise<TodoEntity> {
         const todo = await this.todoModel.findByIdAndUpdate(id, {
-            $set: { title, done, updatedAt: new Date() }
-        });
+            $set: { title, done, updatedAt: new Date() },
+        }, {returnOriginal: false});
 
         if (!todo) {
             throw new HttpException("Todo doesn't exists", HttpStatus.BAD_REQUEST, { cause: new Error() });
