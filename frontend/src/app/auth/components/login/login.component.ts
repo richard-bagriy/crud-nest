@@ -10,9 +10,9 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 	loginForm: FormGroup;
-	submitted = false;
 	returnUrl: string;
 	error: string;
+	hide: boolean = false;
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -36,9 +36,8 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit() {
-		this.submitted = true;
-
-		if (this.loginForm.invalid) { 
+		if (this.loginForm.invalid) {
+			alert("what?");
 			return;
 		}
 
@@ -51,7 +50,8 @@ export class LoginComponent implements OnInit {
 					this.router.navigate([this.returnUrl]);
 				},
 				error => {
-					this.error = error;
+					this.error = error
+					console.error(error);
 				}
 			);
 	}

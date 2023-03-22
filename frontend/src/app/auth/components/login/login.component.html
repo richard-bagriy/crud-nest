@@ -1,55 +1,42 @@
-<div class="container my-3">
-    <div class="row text-center mb-5">
-      <div class="col-md-12 bg-light p-3">
-        <h2>Login</h2>
-      </div>
+<div id="login">
+<mat-card>
+  <mat-card-content>
+    <div class="header">
+      <h2>Login</h2>
     </div>
-  
-    <div class="row">
-      <div class="col-md-6 offset-md-3">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input
-              type="text"
-              class="form-control"
-              id="email"
-              formControlName="email"
-              placeholder="Email"
-            />
-            <div *ngIf="submitted && f.email.errors">
-              <small
-                *ngIf="f.email.errors.required"
-                class="form-text text-muted"
-                >Email is required</small
-              >
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              placeholder="Password"
-              formControlName="password"
-            />
-            <div *ngIf="submitted && f.password.errors">
-              <small
-                *ngIf="f.password.errors.required"
-                class="form-text text-muted"
-                >Password is required</small
-              >
-            </div>
-          </div>
-          <div *ngIf="error" class="my-3">
-            <small class="form-text text-muted">{{ error }}</small>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <div class="mr-top-3">
-          <button type="button" routerLink="/registration">registration</button>
-        </div>
+    <form (ngSubmit)="onSubmit()" name="loginForm" [formGroup]="loginForm" >
+      <div class="email-input">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput required="" />
+            <mat-error *ngIf="f.email.errors?.required">
+              Email required
+            </mat-error>
+          </mat-form-field>
       </div>
+      <div class="password-input">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input formControlName="password" matInput [type]="hide ? 'password' : 'text'" required="" />
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide Password'" [attr.aria-pressed]="hide" >
+            <mat-icon>{{ hide ? 'visibility_off': 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="f.password.errors">
+            Required Password
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <mat-error *ngIf="error">
+        {{ error }}
+      </mat-error>
+      <button mat-flat-button color="primary" type="submit">Login</button>
+    </form>
+
+    <br/>
+    <mat-divider></mat-divider>
+    <div class="button-row">
+      <a mat-button href="/registration">Create New Account</a>
     </div>
-  </div>
+  </mat-card-content>
+</mat-card>
+</div>
