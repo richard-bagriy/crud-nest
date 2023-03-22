@@ -14,7 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider'; 
-
+import { MatListModule } from '@angular/material/list'; 
+import { MatCheckboxModule } from '@angular/material/checkbox'; 
 
 @NgModule({
   imports: [
@@ -32,7 +33,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatFormFieldModule,
     ReactiveFormsModule,
     CommonModule,
-    MatDividerModule
+    MatDividerModule,
+    MatListModule,
+    MatCheckboxModule
   ],
   exports: [
     BrowserAnimationsModule,
@@ -48,7 +51,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatOptionModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatDividerModule
+    MatDividerModule,
+    MatListModule,
+    MatCheckboxModule
   ]
 })
 export class MaterialModule { }

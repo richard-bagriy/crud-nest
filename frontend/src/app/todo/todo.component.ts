@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/services/auth.service';
 import { Todo } from './todo.entity';
 import { TodoModel } from './todo.model';
 import { TodoService } from './todo.service';
@@ -6,10 +8,13 @@ import { TodoService } from './todo.service';
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
+  host: {
+    class: "todo-app"
+  },
   styleUrls: ['./todo.component.sass']
 })
 export class TodoComponent implements OnInit {
-  constructor(private readonly todoService: TodoService) {}
+  constructor(private readonly todoService: TodoService, private readonly authService: AuthService, private readonly router:Router) {}
 
   todoObj: TodoModel = new TodoModel();
   todos : Todo[] = [];
@@ -19,7 +24,7 @@ export class TodoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllTodos();
-  }
+  } 
 
   private clearValues() {
     this.editTaskValue = '';
@@ -35,7 +40,7 @@ export class TodoComponent implements OnInit {
     });
   }
 
-  public addTask() {
+  public addTodo() {
     this.todoObj.title = this.addTaskValue;
     this.todoService.create(this.todoObj as Todo).subscribe(res => {
       this.todos = [...this.todos, res];
@@ -45,25 +50,9 @@ export class TodoComponent implements OnInit {
     })
   }
 
-  public editTask() {
-    this.todoObj.title = this.editTaskValue;
-    this.todoService.updateOne(this.todoObj as Todo).subscribe((res: Todo) => {
-      this.todos = this.todos.map(todo => {
-        if (todo.id === res.id) {
-          return {
-            ...res,
-          }
-        }
 
-        return todo;
-      })
-      this.clearValues();
-    }, error => {
-      console.log(error)
-    });
-  }
 
-  public deleteTask(id: string) {
+  public deleteTodo(id: string) {
     this.todoService.deleteOne(id).subscribe(res => {
       this.todos = this.todos.filter(todo => todo.id !== id);
       this.clearValues();
@@ -72,8 +61,24 @@ export class TodoComponent implements OnInit {
     })
   }
 
-  call(etask : TodoModel) {
-    this.todoObj = etask;
-    this.editTaskValue = etask.title;
+  public toggleDone(todo: Todo) {
+    const payload = {...todo, done: !todo.done};
+    this.todoService.updateOne(payload).subscribe(res => {
+      this.todos = this.todos.map(_todo => {
+        if (_todo.id === todo.id) {
+          return payload;
+        }
+
+        return _todo;
+      })
+      this.clearValues();
+    }, error => {
+      console.log(error);
+    })
+  }
+
+  public logout(): void {
+    this.authService.logout();
+    this.router.navigate(["/login"]);
   }
 }
